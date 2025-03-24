@@ -9,29 +9,7 @@
 #' @return Returns the predicted dilution in comparison to the reference plate
 #' @export
 convert_between_curves <- function(mfi, params_new, params_ref_new, params_ref_old) {
-    dilution <- inverse_log_logistic_5p(
-        log(mfi),
-        params_new[1],
-        params_new[2],
-        params_new[3],
-        params_new[4],
-        exp(params_new[5])
-    )
-
-    ref_log_mfi <- log_logistic_5p(
-        dilution,
-        params_ref_new[1],
-        params_ref_new[2],
-        params_ref_new[3],
-        params_ref_new[4],
-        exp(params_ref_new[5])
-    )
-    inverse_log_logistic_5p(
-        ref_log_mfi,
-        params_ref_old[1],
-        params_ref_old[2],
-        params_ref_old[3],
-        params_ref_old[4],
-        exp(params_ref_old[5])
-    )
+    dilution <- convert_mfi_to_dilution(mfi,params_new)
+    ref_mfi <- convert_dilution_to_mfi(dilution,params_ref_new)
+    convert_mfi_to_dilution(ref_mfi,params_ref_old)
 }
